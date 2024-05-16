@@ -1,0 +1,57 @@
+fullnameOverride: ""
+
+nameOverride: ""
+
+atlantisUrl: "https://b789-200-158-161-29.ngrok-free.app/"
+
+orgAllowlist: "github.com//*"
+
+logLevel: ""
+
+github:
+  user: magsti
+  token: "{{ .Values.vcsSecretName }}.github_token" 
+  secret: "{{ .Values.vcsSecretName }}.github_secret"
+  hostname: "github.com" 
+
+vcsSecretName: github-secret
+ 
+tlsSecretName: ""
+
+googleServiceAccountSecrets:
+  - name: atlantis 
+    secretName: service-account-atlantis
+
+environment:
+  GOOGLE_APPLICATION_CREDENTIALS: "/var/run/secrets/kubernetes.io/key.json"
+  GOOGLE_PROJECT : unifique-5g
+  GOOGLE_REGION : global
+
+extraVolumes:
+  - name: google-cloud-credentials
+    secret:
+      secretName: sa-atlantis-key
+
+extraVolumeMounts:
+  - name: google-cloud-credentials
+    mountPath: /var/run/secrets/kubernetes.io/
+    readOnly: true
+
+repoConfig: | 
+  ---  
+  workflows:
+    myworkflow:
+      apply:
+        steps:
+        - apply
+        - run: ./my-custom-script.sh
+
+  metrics:  # Metrics configuration
+    prometheus:
+      endpoint: /metrics
+
+# environmentSecrets:
+#   - name: GOOGLE_APPLICATION_CREDENTIALS
+#     secretKeyRef:
+#       name: sa-atlantis-key
+#       key: key.json
