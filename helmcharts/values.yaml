@@ -4,7 +4,7 @@ nameOverride: ""
 
 atlantisUrl: "https://b789-200-158-161-29.ngrok-free.app/"
 
-orgAllowlist: "github.com//*"
+orgAllowlist: "github.com/*"
 
 logLevel: ""
 
